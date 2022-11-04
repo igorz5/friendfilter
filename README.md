@@ -4,7 +4,7 @@
 
 ## Ссылка
 
-[friendfilter.igorz.xyz](https://friendfilter.igorz.xyz/)
+[loftfriendfilter.igorz.xyz](https://loftfriendfilter.igorz.xyz/)
 
 ## Как запустить
 
