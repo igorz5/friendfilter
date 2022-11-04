@@ -1,5 +1,6 @@
 {
-  "name": "my-webpack-project",
+  "name": "friend-filter",
+  "description": "Project for the course",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -20,7 +21,6 @@
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1"
   },
-  "description": "My webpack project",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
