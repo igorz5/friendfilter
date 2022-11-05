@@ -68,6 +68,8 @@ export default class FriendsList {
   }
 
   destroy() {
+    this.friends = [];
+
     delete this.friendsLists[this.id];
   }
 
@@ -76,6 +78,8 @@ export default class FriendsList {
     if (!data) return;
 
     const { listId, friend } = JSON.parse(data);
+    if (listId === this.id) return;
+
     const list = FriendsList.getListById(listId);
 
     list.removeFriend(friend.id);
@@ -121,10 +125,6 @@ export default class FriendsList {
           friend,
         })
       );
-    });
-
-    item.addEventListener("dragend", (e) => {
-      this.removeFriend(friend.id);
     });
 
     btn.append(btnIcon);
