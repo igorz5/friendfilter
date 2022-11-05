@@ -54,25 +54,20 @@ async function init() {
   const res = await getFriends();
 
   try {
-    await Promise.all(
-      res.items.map(async (id) => {
-        if (addedFriendsIds.includes(id)) return;
-
-        const user = await getUserById(id);
-        allFriendsList.addFriend(serializeUserData(user));
-      })
-    );
+    const data = await getUsers(res.items);
+    data.forEach((user) => {
+      if (addedFriendsIds.includes(user.id)) return;
+      allFriendsList.addFriend(serializeUserData(user));
+    });
   } finally {
     allFriendsList.isLoading = false;
   }
 
   try {
-    await Promise.all(
-      addedFriendsIds.map(async (id) => {
-        const user = await getUserById(id);
-        addedFriendsList.addFriend(serializeUserData(user));
-      })
-    );
+    const data = await getUsers(addedFriendsIds);
+    data.forEach((user) => {
+      addedFriendsList.addFriend(serializeUserData(user));
+    });
   } finally {
     addedFriendsList.isLoading = false;
   }
@@ -113,6 +108,12 @@ async function getFriends() {
 
 async function getUserById(id) {
   return (await callAPI("users.get", { user_id: id, fields: "photo_100" }))[0];
+}
+
+async function getUsers(ids) {
+  const query = ids.join(", ");
+
+  return await callAPI("users.get", { user_ids: query, fields: "photo_100" });
 }
 
 function serializeUserData(data) {
