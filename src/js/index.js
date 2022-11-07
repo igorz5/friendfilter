@@ -50,15 +50,18 @@ async function init() {
     return;
   }
 
-  const addedFriendsIds = await loadAddedFriends();
-  const res = await getFriends();
+  const addedFriendsIds = loadAddedFriends();
 
   try {
+    const res = await getFriends();
     const data = await getUsers(res.items);
+
     data.forEach((user) => {
       if (addedFriendsIds.includes(user.id)) return;
       allFriendsList.addFriend(serializeUserData(user));
     });
+  } catch {
+    console.error("Failed to fetch friends");
   } finally {
     allFriendsList.isLoading = false;
   }
@@ -68,6 +71,8 @@ async function init() {
     data.forEach((user) => {
       addedFriendsList.addFriend(serializeUserData(user));
     });
+  } catch {
+    console.error("Failed to fetch added friends");
   } finally {
     addedFriendsList.isLoading = false;
   }
@@ -131,7 +136,7 @@ function saveAddedFriends() {
   localStorage.setItem(id, JSON.stringify(ids));
 }
 
-async function loadAddedFriends() {
+function loadAddedFriends() {
   const item = localStorage.getItem(id);
   if (!item) return [];
 

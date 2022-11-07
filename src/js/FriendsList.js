@@ -135,6 +135,10 @@ export default class FriendsList {
   }
 
   render() {
+    if (this._renderTimer) {
+      clearInterval(this._renderTimer);
+    }
+
     this.root.innerHTML = "";
 
     const filtered = this.friends.filter((friend) => {
@@ -146,10 +150,26 @@ export default class FriendsList {
       return name.includes(filter);
     });
 
-    for (const friend of filtered) {
-      const item = this.buildItem(friend);
-      this.root.append(item);
-    }
+    let current = 0;
+    const renderPerTick = 50;
+    const delay = 100;
+    this._renderTimer = setInterval(() => {
+      if (current >= filtered.length) {
+        clearInterval(this._renderTimer);
+        return;
+      }
+
+      const items = [];
+      const length = Math.min(current + renderPerTick, filtered.length);
+      for (let i = current; i < length; i++) {
+        const friend = filtered[i];
+        const item = this.buildItem(friend);
+        items.push(item);
+      }
+
+      this.root.append(...items);
+      current += renderPerTick;
+    }, delay);
   }
 
   addFriend(friend) {
